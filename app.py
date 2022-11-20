@@ -8,9 +8,9 @@ import torch
 def init():
     global model
     
-    # device = 0 if torch.cuda.is_available() else -1
-    model = StableDiffusionPipeline.from_pretrained("andrewburns/emoji_v2")
-    model.to("cuda")
+    model = StableDiffusionPipeline.from_pretrained('andrewburns/emoji_v2', torch_dtype=torch.float16, revision="fp16")
+    model = model.to('cuda')
+    # model.to("cuda")
 
 
     # model = pipeline('fill-mask', model='andrewburns/emoji_v2', device=device)
