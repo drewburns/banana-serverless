@@ -1,4 +1,6 @@
-from transformers import pipeline
+# from transformers import pipeline
+from diffusers import StableDiffusionPipeline
+
 import torch
 
 # Init is ran on server startup
@@ -6,8 +8,12 @@ import torch
 def init():
     global model
     
-    device = 0 if torch.cuda.is_available() else -1
-    model = pipeline('fill-mask', model='bert-base-uncased', device=device)
+    # device = 0 if torch.cuda.is_available() else -1
+    pipe = StableDiffusionPipeline.from_pretrained("andrewburns/emoji_v2")
+    pipe.to("cuda")
+
+
+    # model = pipeline('fill-mask', model='andrewburns/emoji_v2', device=device)
 
 # Inference is ran for every server call
 # Reference your preloaded global model variable here.
