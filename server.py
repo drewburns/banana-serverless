@@ -39,8 +39,7 @@ def inference(request):
     buffered = BytesIO()
     output.images[0].save(buffered,format='JPEG')
     image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    return {'image_b64': image_b64}
-    # return response.json(output)
+    return response.json({'image_b64': image_b64})
 
 
 if __name__ == '__main__':
