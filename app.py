@@ -10,6 +10,10 @@ def init():
     
     model = StableDiffusionPipeline.from_pretrained('andrewburns/emoji_v2', torch_dtype=torch.float16)
     model = model.to('cuda')
+
+    def null_safety(images, **kwargs):
+        return images, False
+    model.safety_checker = null_safety
     # model.to("cuda")
 
 

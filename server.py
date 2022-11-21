@@ -5,6 +5,8 @@
 
 from sanic import Sanic, response
 import subprocess
+import base64
+from io import BytesIO
 import app as user_src
 
 # We do the model load-to-GPU step on server startup
@@ -13,6 +15,11 @@ user_src.init()
 
 # Create the http server app
 server = Sanic("my_app")
+def im_2_b64(image):
+    buff = BytesIO()
+    image.save(buff, format="JPEG")
+    img_str = base64.b64encode(buff.getvalue())
+    return img_str
 
 # Healthchecks verify that the environment is correct on Banana Serverless
 @server.route('/healthcheck', methods=["GET"])
@@ -34,8 +41,9 @@ def inference(request):
         model_inputs = request.json
 
     output = user_src.inference(model_inputs)
-    print("OUTPUT FROM MODEL", output)
-    return response.json(output)
+    print("IMAGE: ", output.images)
+    return {'image_b64': im_2_b64(output.images[0])}
+    # return response.json(output)
 
 
 if __name__ == '__main__':
