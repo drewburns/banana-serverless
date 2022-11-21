@@ -15,11 +15,6 @@ user_src.init()
 
 # Create the http server app
 server = Sanic("my_app")
-def im_2_b64(image):
-    buff = BytesIO()
-    image.save(buff, format="JPEG")
-    img_str = base64.b64encode(buff.getvalue())
-    return img_str
 
 # Healthchecks verify that the environment is correct on Banana Serverless
 @server.route('/healthcheck', methods=["GET"])
@@ -41,8 +36,10 @@ def inference(request):
         model_inputs = request.json
 
     output = user_src.inference(model_inputs)
-    print("IMAGE: ", output.images)
-    return {'image_b64': im_2_b64(output.images[0])}
+    buffered = BytesIO()
+    output.images[0].save(buffered,format='JPEG')
+    image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    return {'image_b64': image_b64}
     # return response.json(output)
 
 
