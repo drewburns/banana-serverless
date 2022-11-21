@@ -35,11 +35,14 @@ def inference(request):
     except:
         model_inputs = request.json
 
-    output = user_src.inference(model_inputs)
-    buffered = BytesIO()
-    output.images[0].save(buffered,format='JPEG')
-    image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    return response.json({'image_b64': image_b64})
+    images = []
+    for i in range(3):
+        output = user_src.inference(model_inputs)
+        buffered = BytesIO()
+        output.images[0].save(buffered,format='JPEG')
+        image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        images.append({'image_b64': image_b64})
+    return response.json(images)
 
 
 if __name__ == '__main__':
