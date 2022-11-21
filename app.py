@@ -8,7 +8,7 @@ import torch
 def init():
     global model
     
-    model = StableDiffusionPipeline.from_pretrained('andrewburns/emoji_v2', torch_dtype=torch.float16, revision="fp16")
+    model = StableDiffusionPipeline.from_pretrained('andrewburns/emoji_v2', torch_dtype=torch.float16)
     model = model.to('cuda')
     # model.to("cuda")
 
