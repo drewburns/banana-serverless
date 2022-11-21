@@ -9,7 +9,7 @@ from transformers import pipeline
 
 def download_model():
     # do a dry run of loading the huggingface model, which will download weights
-    StableDiffusionPipeline.from_pretrained('andrewburns/emoji_v2', torch_dtype=torch.float16)
+    StableDiffusionPipeline.from_pretrained('andrewburns/emoji_ema', torch_dtype=torch.float16)
 
 if __name__ == "__main__":
     download_model()
