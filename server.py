@@ -36,7 +36,7 @@ def inference(request):
         model_inputs = request.json
 
     images = []
-    for i in range(4):
+    for i in range(2):
         output = user_src.inference(model_inputs)
         buffered = BytesIO()
         output.images[0].save(buffered,format='JPEG')
