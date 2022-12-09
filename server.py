@@ -35,14 +35,19 @@ def inference(request):
     except:
         model_inputs = request.json
 
-    images = []
-    for i in range(2):
-        output = user_src.inference(model_inputs)
-        buffered = BytesIO()
-        output.images[0].save(buffered,format='JPEG')
-        image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        images.append({'image_b64': image_b64})
-    return response.json(images)
+    if "url" in model_inputs:
+        user_src.img2img(model_inputs["prompt"], model_inputs["path"])
+        return response.json("ok")
+    else:
+        images = []
+        for i in range(4):
+            output = user_src.inference(model_inputs)
+            buffered = BytesIO()
+            output.images[0].save(buffered,format='JPEG')
+            image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            images.append({'image_b64': image_b64})
+        return response.json(images)
+
 
 
 if __name__ == '__main__':
