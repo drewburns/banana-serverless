@@ -51,5 +51,5 @@ def img2img(prompt, path):
     init_image.thumbnail((125, 125))
 
 
-    images = model(prompt=prompt, init_image=init_image, strength=0.75, guidance_scale=4).images
-    print(images[0])
+    images = model(prompt=prompt, image=init_image, strength=0.75, guidance_scale=4).images
+    return images[0]

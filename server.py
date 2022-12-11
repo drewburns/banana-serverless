@@ -36,8 +36,11 @@ def inference(request):
         model_inputs = request.json
 
     if "url" in model_inputs:
-        user_src.img2img(model_inputs["prompt"], model_inputs["path"])
-        return response.json("ok")
+        image = user_src.img2img(model_inputs["prompt"], model_inputs["path"])
+        buffered = BytesIO()
+        image.save(buffered,format='JPEG')
+        image_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        return response.json([{'image_b64': image_b64}])
     else:
         images = []
         for i in range(4):
