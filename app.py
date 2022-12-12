@@ -10,13 +10,17 @@ from io import BytesIO
 # Load your model to GPU as a global variable here using the variable name "model"
 def init():
     global model
+    global imgmodel
     
     model = StableDiffusionPipeline.from_pretrained('andrewburns/emoji_ema', torch_dtype=torch.float16)
     model = model.to('cuda')
 
+    imgmodel = StableDiffusionImg2ImgPipeline.from_pretrained('andrewburns/emoji_ema', torch_dtype=torch.float16)
+
     def null_safety(images, **kwargs):
         return images, False
     model.safety_checker = null_safety
+    imgmodel.safety_checker = null_safety
     # model.to("cuda")
 
 
@@ -51,5 +55,5 @@ def img2img(prompt, path):
     init_image.thumbnail((125, 125))
 
 
-    images = model(prompt=prompt, image=init_image, strength=0.75, guidance_scale=4).images
+    images = imgmodel(prompt=prompt, image=init_image, strength=0.75, guidance_scale=4).images
     return images[0]
